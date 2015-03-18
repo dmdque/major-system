@@ -25,6 +25,7 @@ class Major {
     }
 
     int[] wordsIndex = dp(encode, al);
+
     for (int i = wordsIndex.length - 1; i >= 0; i--) {
       System.out.println(words.get(wordsIndex[i]));
     }
@@ -48,7 +49,7 @@ class Major {
     //row is length of number
     int col = vocabulary.size();
     int row = encode.length();
-    int[][] dpTable = new int[col][row];
+    int[][] dpTable = new int[row][col];
 
     for (int i = 0; i < encode.length(); i++) {
       for (int j = 0; j < vocabulary.size(); j++) {
@@ -57,13 +58,13 @@ class Major {
         if (DEBUG) { System.out.println(vocabulary.get(j)); }
         if (DEBUG) { System.out.println("remainderStr: " + remainderStr); }
         if (remainderStr.equals("")) {
-          dpTable[j][i] = 1;
+          dpTable[i][j] = 1;
         }
         if (!remainderStr.equals("error") && !remainderStr.equals("")) {
           if (DEBUG) { System.out.println("looking up remainder: " + remainderStr); }
           int bestCode = dpLookup(remainderStr, dpTable);
           if (bestCode != 0) {
-            dpTable[j][i] = bestCode + 1;
+            dpTable[i][j] = bestCode + 1;
           }
         }
       }
@@ -75,68 +76,85 @@ class Major {
   }
 
   public static int[] dpBacktrace (int[][] table, String encode, ArrayList<String> vocabulary) {
-    int row = table[0].length - 1;
-    int col = table.length - 1; // default col value, in case none is found
+    int row = table.length - 1;
+    int col = table[0].length - 1; // default col value, in case none is found
 
+    // find initial value from table
     int colVal = Integer.MAX_VALUE;
-    for (int i = 0; i < table.length; i++) {
-      if (table[i][row] != 0 && table[i][row] < colVal) { // TODO: change from zero to inf
-        colVal = table[i][row];
+    for (int i = 0; i < table[0].length; i++) {
+      if (table[row][i] != 0 && table[row][i] < colVal) { // TODO: change from zero to inf
+        colVal = table[row][i];
         col = i;
       }
     }
 
-    int[] words = new int[table[col][row]];
+    int[] words = new int[table[row][col]];
     int wordsindex = 0;
-    for (int i = table[col][row]; i > 0; i--) {
-      String word = vocabulary.get(col);
-      if (DEBUG) { System.out.println(table[col][row]); }
-      if (DEBUG) { System.out.println(encode + ": " + word); }
+    for (int i = table[row][col]; i > 0; i--) {
+      // save word location
       words[wordsindex] = col;
       wordsindex++;
+      String word = vocabulary.get(col);
+      if (DEBUG) { System.out.println(table[row][col]); }
+      if (DEBUG) { System.out.println(encode + ": " + word); }
       encode = stringSubtract(encode, word);
-      if(encode.equals("")) {
+
+      if (encode.equals("")) {
+        break;
+      } else if (encode.equals("error")) {
+        if (DEBUG) { System.out.println("encountered invalid string during backtrace"); }
         break;
       }
+
       int[] coord = dpLookupIndex(encode, table);
-      col = coord[0];
-      row = coord[1];
+      row = coord[0];
+      col = coord[1];
     }
     return words;
   }
 
-  // returns largest...
+  // returns col of the smallest non-zero in dpTable
   public static int[] dpLookupIndex (String remainder, int[][] table) {
+    if (DEBUG) { System.out.println("remainder: " + remainder.length()); }
     int row = remainder.length() - 1;
     if (row < 0) {
       return new int[0];
     }
-    for (int i = 0; i < table.length; i++) {
-      if (table[i][row] != 0) {
-        // TODO: max/min
-        int[] ret = {i, row};
-        return ret;
+    int min = Integer.MAX_VALUE;
+    int minIndex = -1;
+    for (int i = 0; i < table[0].length; i++) {
+      if (table[row][i] != 0 && table[row][i] < min) {
+        min = table[row][i];
+        minIndex = i;
       }
     }
-    return new int[0];
+    if (min != Integer.MAX_VALUE) {
+      int[] ret = {row, minIndex};
+      if (DEBUG) { System.out.println("dpLookupIndex: row: " + row + " col: " + minIndex + " val: " + min); }
+      return ret;
+    } else {
+      return new int[0];
+    }
   }
 
-  // returns largest...
+  // returns value
   public static int dpLookup (String remainder, int[][] table) {
     int row = remainder.length() - 1;
     if (row < 0) {
       return 0;
     }
     int min = Integer.MAX_VALUE;
-    for (int i = 0; i < table.length; i++) {
-      if (table[i][row] != 0 && table[i][row] < min) {
-          min = table[i][row];
+    //int minIndex;
+    for (int i = 0; i < table[0].length; i++) {
+      if (table[row][i] != 0 && table[row][i] < min) {
+        min = table[row][i];
+        //minIndex = i;
       }
     }
-    if (min == Integer.MAX_VALUE) {
-        return 0;
+    if (min != Integer.MAX_VALUE) {
+      return min;
     } else {
-        return min;
+      return 0;
     }
   }
 
@@ -172,9 +190,9 @@ class Major {
   }
 
   public static void printTable (int[][] table) {
-    for (int i = 0; i < table[0].length; i++) {
-      for (int j = 0; j < table.length; j++) {
-        System.out.print(table[j][i] + "\t");
+    for (int i = 0; i < table.length; i++) {
+      for (int j = 0; j < table[0].length; j++) {
+        System.out.print(table[i][j] + "\t");
       }
       System.out.println();
     }
