@@ -60,8 +60,11 @@ class Major {
           dpTable[j][i] = 1;
         }
         if (!remainderStr.equals("error") && !remainderStr.equals("")) {
-          if (DEBUG) { System.out.println("remainderStr again: " + remainderStr); }
-          dpTable[j][i] = dpLookup(remainderStr, dpTable) + 1;
+          if (DEBUG) { System.out.println("looking up remainder: " + remainderStr); }
+          int bestCode = dpLookup(remainderStr, dpTable);
+          if (bestCode != 0) {
+            dpTable[j][i] = bestCode + 1;
+          }
         }
       }
     }
@@ -124,13 +127,17 @@ class Major {
     if (row < 0) {
       return 0;
     }
+    int min = Integer.MAX_VALUE;
     for (int i = 0; i < table.length; i++) {
-      if (table[i][row] != 0) {
-        // TODO: max
-        return table[i][row];
+      if (table[i][row] != 0 && table[i][row] < min) {
+          min = table[i][row];
       }
     }
-    return 0;
+    if (min == Integer.MAX_VALUE) {
+        return 0;
+    } else {
+        return min;
+    }
   }
 
   // returns -1 if not found
