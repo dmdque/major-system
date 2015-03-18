@@ -192,7 +192,11 @@ class Major {
   public static void printTable (int[][] table) {
     for (int i = 0; i < table.length; i++) {
       for (int j = 0; j < table[0].length; j++) {
-        System.out.print(table[i][j] + "\t");
+        if (table[i][j] == 0) {
+          System.out.print("-" + " ");
+        } else {
+          System.out.print(table[i][j] + " ");
+        }
       }
       System.out.println();
     }
