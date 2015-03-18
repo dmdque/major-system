@@ -27,8 +27,12 @@ class Major {
     int[] wordsIndex = dp(encode, al);
 
     for (int i = wordsIndex.length - 1; i >= 0; i--) {
-      System.out.println(words.get(wordsIndex[i]));
+      System.out.print(words.get(wordsIndex[i]));
+      if (i != 0) {
+        System.out.print(", ");
+      }
     }
+    System.out.println();
   }
 
   // mutates al
@@ -70,7 +74,7 @@ class Major {
       }
     }
 
-    printTable(dpTable);
+    //printTable(dpTable);
 
     return dpBacktrace(dpTable, encode, vocabulary);
   }
