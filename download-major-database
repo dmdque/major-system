@@ -1,0 +1,7 @@
+#!/bin/bash
+rm dicttest
+for i in {1..9}
+do
+  curl "http://www.rememberg.com/Peg-list-1000/peg-${i}01-to-$((i+1))00--The-Mnemonic-Peg-System-huge-list-of-1000-pegs" >> dicttest
+done
+vim dicttest -s format-dict.vimscript
