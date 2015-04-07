@@ -3,7 +3,7 @@ converts a number into a series of mnemonic words using a dynamic programming ap
 
 ### Usage
     javac Major.java
-    java Major 314159265358979323846264338327950288419716939937510582097494
+    java Major 3141592653589
 
-    > number to encode: 314159265358979323846264338327950288419716939937510582097494
-    > Motor, Toolbox, Angel, My Life, Speak up, Homonym, Frog, Sangria, Home movie, Monkey, Blues, Navvy, Red bay, Cadge, Bomb, Bamako, Waltz, Slovenia, sip, car, bar
+    > number to encode: 3141592653589
+    > moderately, pendulum, lavabo
