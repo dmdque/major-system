@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 class Major {
   public static final boolean DEBUG = false;
+  public static final boolean DEBUG2 = false;
   public static void main(String[] args) throws Exception {
     String encode = args[0];
     System.out.println("number to encode: " + encode);
@@ -101,6 +102,7 @@ class Major {
       String word = vocabulary.get(col);
       if (DEBUG) { System.out.println(table[row][col]); }
       if (DEBUG) { System.out.println(encode + ": " + word); }
+      if (DEBUG2) { System.out.println(word.length()); }
       encode = stringSubtract(encode, word);
 
       if (encode.equals("")) {
