@@ -18,7 +18,7 @@ object Normalize {
           tokens = 2 +: tokens
         } else if (token.equals("M")) {
           tokens = 3 +: tokens
-        } else if (token.equals("R") || token.equals("ER") || token.equals("ER0")) { // TODO: make this more general
+        } else if (token.equals("R") || token.equals("ER") || token.equals("ER0") || token.equals("ER1") || token.equals("ER2")) { // TODO: make this more general
           tokens = 4 +: tokens
         } else if (token.equals("L")) {
           tokens = 5 +: tokens
