@@ -13,8 +13,7 @@ class Major {
     ArrayList<String> al = new ArrayList<String>();
     ArrayList<String> words = new ArrayList<String>();
 
-    readDict(al, "dict-num.txt");
-    readDict(words, "dict.txt");
+    readDict(al, words, "dict.txt");
     
     if(DEBUG) {
       for (int i = 0; i < al.size(); i++) {
@@ -37,12 +36,14 @@ class Major {
   }
 
   // mutates al
-  public static void readDict (ArrayList<String> al, String filename) {
+  public static void readDict (ArrayList<String> al, ArrayList<String> words, String filename) {
     String thisLine = null;
       try {
         BufferedReader br = new BufferedReader(new FileReader(filename));
         while ((thisLine = br.readLine()) != null) {
-          al.add(thisLine);
+          String[] lineSplit = thisLine.split(" ");
+          al.add(lineSplit[0]);
+          words.add(lineSplit[1]);
         }       
       } catch(Exception e) {
         e.printStackTrace();
